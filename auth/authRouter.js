@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const authToken = require('./authenticate-token');
+const authenticate = require('./authenticate.js');
+const validateToken = require('./validate.js');
 const db = require('../database/dbConfig.js');
 
-const Users = require('../models/usersModel');
+const Users = require('../models/usersModel.js');
 
 router.post('/register', (req, res) => {
   let user = req.body;
@@ -26,7 +27,7 @@ router.post('/login', (req, res) => {
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = authToken.genToken(user);
+        const token = authenticate.genToken(user);
         res.status(200).json({
           message: `Welcome ${user.username}!`,
           token
@@ -40,21 +41,21 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get('/users', (req, res) => {
+router.get('/users', validateToken, (req, res) => {
   db('users')
     .then(users => {
       users = users.map(user => {
         return {
           id: user.id,
-          username: user.username,
-          password: user.password
+          username: user.username
         };
       });
       res.status(200).json(users);
     })
     .catch(err =>
       res.status(500).json({
-        message: 'Error getting users.'
+        message: 'Error getting users.',
+        err: err
       })
     );
 });

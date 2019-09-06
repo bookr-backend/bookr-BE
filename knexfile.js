@@ -38,7 +38,7 @@ module.exports = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: './database/bookr.sqlite3'
+      filename: './database/bookr.db3'
     },
     useNullAsDefault: true,
     migrations: {
