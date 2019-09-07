@@ -65,7 +65,7 @@ router.delete('/:id', async (req, res) => {
     if (count) {
       res
         .status(200)
-        .json({ deleted: count, message: 'User has been deleted.' });
+        .json({ deleted: count, message: `User ${id} has been deleted.` });
     } else {
       res.status(404).json({ message: `Could not find user ${id}` });
     }
