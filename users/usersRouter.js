@@ -22,14 +22,18 @@ router.get('/', validateToken, (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const user = await db('users').where({ id });
-    res.json(user);
+    const [user] = await db('users').where({ id });
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: `Could not find user with id ${id}` });
+    }
   } catch (err) {
     res
       .status(500)
-      .json({ err: err.message, message: 'Failed to retrieve car.' });
+      .json({ err: err.message, message: 'Failed to retrieve user.' });
   }
 });
 
