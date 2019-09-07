@@ -8,13 +8,15 @@ module.exports = (req, res, next) => {
       if (err) {
         res
           .status(401)
-          .json({ message: 'Error verifying token.', error: err.message });
+          .json({ message: 'Error verifying token.', err: err.message });
       } else {
         req.user_id = decodedToken.id;
         next();
       }
     });
   } else {
-    res.status(401).json({ message: 'Please provide a token.' });
+    res
+      .status(401)
+      .json({ message: 'Please provide a token.', err: err.message });
   }
 };
