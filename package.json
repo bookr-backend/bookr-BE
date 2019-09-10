@@ -1,7 +1,7 @@
 {
   "name": "bookr-be",
   "version": "1.0.0",
-  "description": "Bookr is your source for all things Text Book. -BE",
+  "description": "Bookr is your source for all things Text Book. -Back End",
   "main": "index.js",
   "scripts": {
     "server": "nodemon index.js",
@@ -33,5 +33,8 @@
     "jest": "^24.9.0",
     "nodemon": "^1.19.2",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
