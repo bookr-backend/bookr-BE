@@ -4,7 +4,6 @@ const db = require('../database/dbConfig.js');
 
 module.exports = {
   add,
-  authenticate,
   find,
   findBy,
   getAll,
@@ -40,20 +39,4 @@ async function insert(user) {
     .return(user);
 }
 
-function authenticate(req, res, next) {
-  const token = req.get('authorization');
 
-  if (token) {
-    jwt.verify(token, secrets, (err, decodedToken) => {
-      if (err) return res.status(401).json(err);
-
-      req.decodedToken = decodedToken;
-
-      next();
-    });
-  } else {
-    return res.status(401).json({
-      error: 'Please provide a token.'
-    });
-  }
-}
