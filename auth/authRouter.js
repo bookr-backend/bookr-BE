@@ -2,7 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const authenticate = require('./authenticate.js');
 
-const Users = require('../users/usersModel');
+const Users = require('../users/usersModel.js');
 
 router.post('/register', (req, res) => {
   let user = req.body;
@@ -14,9 +14,7 @@ router.post('/register', (req, res) => {
       res.status(201).json(user);
     })
     .catch(err => {
-      res
-        .status(500)
-        .json({ message: 'Error registering user.', err: err.message });
+      res.status(500).json({ message: 'Error registering user: '+err });
     });
 });
 
@@ -36,8 +34,11 @@ router.post('/login', (req, res) => {
         res.status(401).json({ message: 'Invalid credentials' });
       }
     })
-    .catch(error => {
-      res.status(500).json(error);
+    .catch(err => {
+      res.status(500).json({
+        message: 'Error with login: '+err,
+        err: err
+      });
     });
 });
 
