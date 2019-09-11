@@ -15,18 +15,13 @@ module.exports = {
     },
     migrations: {
       directory: './database/migrations'
-    },
-    seeds: {
-      directory: './database/seeds'
     }
   },
 
   production: {
-    client: 'sqlite3',
+    client: 'postgresql',
     useNullAsDefault: true,
-    connection: {
-      filename: './database/bookr.db3'
-    },
+    connection: 'postgres://rviquqmgwgkcdb:24f51bb4fd2519d3aa9f159776723746179e37468dadbd47862919d971087553@ec2-23-21-148-223.compute-1.amazonaws.com:5432/d6dibv4mgfpqht',
     pool: {
       afterCreate: (conn, done) => {
         conn.run('PRAGMA foreign_keys = ON', done);
@@ -34,9 +29,6 @@ module.exports = {
     },
     migrations: {
       directory: './database/migrations'
-    },
-    seeds: {
-      directory: './database/seeds'
     }
   }
 };
