@@ -1,13 +1,20 @@
 const db=require('../database/dbConfig.js');
  
  module.exports={
+    add,
     find,
     findById,
-    add,
-    remove,
     update,
-    
+    remove    
 }
+
+// CREATE
+async function add(book){
+    const [id] = await db('books').returning('id').insert(book);
+    return findById(id);
+}
+
+// READ
 // GET
 function find(){
     return db('books');
@@ -15,24 +22,19 @@ function find(){
 
 //GET BY ID
 function findById(id){
-    return db('books').
-    where({id})
+    return db('books')
+    .where({id})
+    .first();
 }
 
-
-// POST
-async function add(book){
-    const [id] = await db('books').insert(book);
-    return findById(id);
-}
-// DELETE
-function remove(id){
-    return  db('books').where({ id }).del();
-}
-
-
-
-//PUT
+// UPDATE
 async function update(changes,id){
-    return await db('books').where({ id }).update(changes);
+    await db('books').where({ id }).update(changes);
+    return findById(id);
 } 
+
+// DELETE
+async function remove(id){
+    await db('books').where({ id }).del();
+    return find();
+}
