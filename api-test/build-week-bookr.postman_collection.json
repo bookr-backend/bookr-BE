@@ -1,0 +1,619 @@
+{
+	"info": {
+		"_postman_id": "2083a6ed-f70c-4e66-bc39-119303456985",
+		"name": "build-week-bookr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Post register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0481c3ec-55eb-4298-b5d4-4cf170b47af1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"User102\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/auth/register",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f763f25a-b74c-442f-a283-ba199e937c70",
+								"exec": [
+									"tests[\"response code is 200\"] = responseCode.code === 200",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"env.token\", jsonData.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"User102\",\n\t\"password\":\"password\"\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/auth/login",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{env.token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/users",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"User104\",\n    \"password\": \"password1\"\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/users/22",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"users",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/users/1",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Create Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{env.token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"book8\",\n\t\"author\":\"author8\",\n\t\"publisher\":\"publisher8\"\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/books/",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"books",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{env.token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/books",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"book5\",\n\t\"author\":\"author5\",\n\t\"publisher\":\"publisher5\"\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/books/5",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"books",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Book",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/books/1",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"books",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Create Review",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"contents\":\"Amazing book !\",\n\t\"book_id\":3,\n\t\"user_id\":1\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/reviews/",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reviews by Book",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{env.token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/reviews/book/3",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"reviews",
+								"book",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Review by Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{env.token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/reviews/3",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"reviews",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"contents\":\"amazing\",\n\t\"book_id\":2,\n\t\"user_id\":17\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/reviews/3",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"reviews",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{env.token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"contents\":\"whatabook\",\n\t\"book_id\":2,\n\t\"user_id\":2\n}"
+						},
+						"url": {
+							"raw": "{{env.scheme}}://{{env.host}}:{{env.port}}/api/reviews/4",
+							"protocol": "{{env.scheme}}",
+							"host": [
+								"{{env.host}}"
+							],
+							"port": "{{env.port}}",
+							"path": [
+								"api",
+								"reviews",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
