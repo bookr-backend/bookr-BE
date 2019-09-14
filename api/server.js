@@ -20,7 +20,7 @@ server.use('/api/books', bookRouter);
 server.use('/api/reviews',reviewRouter);
 
 server.get('/', (req, res) => {
-  res.send('Welcome to Bookr!');
+  res.status(200).json("Welcome to Bookr!");
 });
 
 module.exports = server;
