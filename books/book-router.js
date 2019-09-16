@@ -1,19 +1,32 @@
 const express = require('express');
-const db=require('../database/dbConfig.js');
 const Books = require('./book-model.js');
+const validateToken = require('../auth/validate.js');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+// CREATE
+router.post('/',validateToken, async (req, res) => {
+  const bookData = req.body;
+
+  try {
+    const addedBook = await Books.add(bookData);
+    res.status(201).json(addedBook);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to create new book:' + err });
+  }
+});
+
+// READ
+router.get('/',validateToken, async (req, res) => {
   try {
     const books = await Books.find();
     res.status(200).json(books);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to get books' });
+    res.status(500).json({ message: 'Failed to get books:' + err });
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',validateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -25,42 +38,12 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ message: 'Could not find book with given id.' })
     }
   } catch (err) {
-    res.status(500).json({ message: 'Failed to get books' });
+    res.status(500).json({ message: 'Failed to get books:' + err });
   }
 });
 
-
-  
-router.post('/', async (req, res) => {
-  const bookData = req.body;
-
-  try {
-    const book = await Books.add(bookData);
-    res.status(201).json(book);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to create new book' });
-  }
-});
-
-router.post('/:id/reviews', async (req, res) => {
-  const reviewData = req.body;
-  const { id } = req.params; 
-
-  try {
-    const book = await Books.findById(id);
-
-    if (book) {
-      const review = await Books.addReview(reviewData, id);
-      res.status(201).json(review);
-    } else {
-      res.status(404).json({ message: 'Could not find book with given id.' })
-    }
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to create new review' });
-  }
-});
-
-router.put('/:id', async (req, res) => {
+// UPDATE
+router.put('/:id',validateToken, async (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -74,22 +57,25 @@ router.put('/:id', async (req, res) => {
       res.status(404).json({ message: 'Could not find book with given id' });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Failed to update book' });
+    res.status(500).json({ message: 'Failed to update book:' + err });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+// DELETE
+router.delete('/:id',validateToken, async (req, res) => {
   const { id } = req.params;
-  try {
-    const deleted = await  Books.remove(id);
 
-    if (deleted) {
-      res.json({ removed: deleted });
+  try {
+    const book = await Books.findById(id);
+
+    if (book) {
+      const updatedBookList = await Books.remove(id);
+      res.json(updatedBookList);
     } else {
       res.status(404).json({ message: 'Could not find book with given id' });
     }
   } catch (err) {
-    res.status(500).json({ message: 'Failed to delete book' });
+    res.status(500).json({ message: 'Failed to delete book: '+err });
   }
 });
 

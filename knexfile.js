@@ -15,35 +15,42 @@ module.exports = {
     },
     migrations: {
       directory: './database/migrations'
-    },
-    seeds: {
-      directory: './database/seeds'
     }
   },
+
+  pg_test: {
+    client: 'pg',
+    connection: {
+      host : 'localhost',
+      database: 'bookr',
+      user: 'me',
+      password: 'password'
+    },
+    migrations: {
+      directory: './database/migrations'
+    },
+    useNullAsDefault: true
+  },  
+
+  production: {
+    client: 'pg',
+    useNullAsDefault: true,
+    connection: process.env.DATABASE_URL,
+    migrations: {
+      directory: './database/migrations'
+    }
+  },
+
 
   testing: {
     client: 'sqlite3',
     connection: {
-      filename: './database/testbookr.db3'
+      filename: './data/test.db3',
     },
     useNullAsDefault: true,
     migrations: {
-      directory: './database/migrations'
+      directory: './database/migrations',
     },
-    seeds: {
-      directory: './database/seeds'
-    }
+   
   },
-
-  production: {
-    client: 'sqlite3',
-    connection: {
-      filename: './database/bookr.db3'
-    },
-    useNullAsDefault: true,
-    migrations: {
-      directory: './database/migrations'
-    },
-    seeds: { directory: './database/seeds' }
-  }
 };

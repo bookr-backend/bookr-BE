@@ -1,16 +1,26 @@
 const express = require('express');
- const db=require('../database/dbConfig.js');
-const Books = require('../books/book-model.js');
 const Reviews=require('./review-model.js');
+const validateToken = require('../auth/validate.js');
 
 const router = express.Router();
 
+// CREATE
+router.post('/',validateToken, async (req, res) => {
+    const reviewData = req.body;
+    try {
+        const addedReview = await Reviews.add(reviewData);
+        res.status(201).json(addedReview);
+      } catch (err) {
+        res.status(500).json({ message: 'Failed to create new review: ' + err });
+      }
+  });
 
-router.get('/book/:book_id', async (req, res) => {
+// READ
+router.get('/book/:book_id',validateToken, async (req, res) => {
     const { book_id } = req.params;
   
     try {
-      const reviews = await Reviews.findReviewsByBookId(book_id);
+      const reviews = await Reviews.findByBookId(book_id);
   
       if (reviews.length) {
         res.json(reviews);
@@ -18,15 +28,15 @@ router.get('/book/:book_id', async (req, res) => {
         res.status(404).json({ message: 'Could not find reviews for given book' })
       }
     } catch (err) {
-      res.status(500).json({ message: 'Failed to get reviews: '+err });
+      res.status(500).json({ message: 'Failed to get reviews: ' + err });
     }
   });
 
-  router.get('/:id', async (req, res) => {
+  router.get('/:id',validateToken, async (req, res) => {
     const { id } = req.params;
   
     try {
-      const review = await Reviews.findReviewById(id);
+      const review = await Reviews.findById(id);
   
       if (review) {
         res.json(review);
@@ -34,26 +44,45 @@ router.get('/book/:book_id', async (req, res) => {
         res.status(404).json({ message: 'Could not find review with given id.' })
       }
     } catch (err) {
-      res.status(500).json({ message: 'Failed to get reviews'});
+      res.status(500).json({ message: 'Failed to get reviews: ' + err});
     }
   });
   
-
-
-
-router.post('/', async (req, res) => {
-   
-    const reviewData = req.body;
+  // UPDATE
+  router.put('/:id',validateToken, async (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+  
     try {
-        const review = await Reviews.addReview(reviewData);
-        res.status(201).json(review);
-      } catch (err) {
-        res.status(500).json({ message: 'Failed to create new review: '+err });
+      const review = await Reviews.findById(id);
+  
+      if (review) {
+        const updatedReview = await Reviews.update(changes, id);
+        res.json(updatedReview);
+      } else {
+        res.status(404).json({ message: 'Could not find review with given id' });
       }
-     
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to update review:' + err });
+    }
   });
 
-
- 
+  // DELETE
+  router.delete('/:id',validateToken, async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      const review = await Reviews.findById(id);
+  
+      if (review) {
+        const updatedReviewsByBook = await Reviews.remove(id);
+        res.json(updatedReviewsByBook);
+      } else {
+        res.status(404).json({ message: 'Could not find review with given id' });
+      }
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to delete review: ' + err });
+    }
+  });
 
   module.exports = router;
