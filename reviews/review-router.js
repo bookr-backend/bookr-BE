@@ -7,12 +7,17 @@ const router = express.Router();
 // CREATE
 router.post('/',validateToken, async (req, res) => {
     const reviewData = req.body;
-    try {
+    if (reviewData.rating <= 5 && reviewData.rating >= 0) {
+      try {
         const addedReview = await Reviews.add(reviewData);
         res.status(201).json(addedReview);
       } catch (err) {
         res.status(500).json({ message: 'Failed to create new review: ' + err });
       }
+    } else {
+      res.status(500).json({ message: 'Check your rating. It should not be lower than 0 or higher than 5.'});
+    }
+
   });
 
 // READ

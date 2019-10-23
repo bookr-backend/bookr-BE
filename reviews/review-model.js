@@ -26,7 +26,7 @@ function findById(id){
 function findByBookId(book_id){
     return db('books')
     .join('reviews','books.id','reviews.book_id')
-    .select('reviews.id','books.id as book_id','books.title','reviews.contents','reviews.user_id')
+    .select('reviews.id','books.id as book_id','books.title','reviews.contents','reviews.added_by','reviews.rating')
     .where({book_id})
     .orderBy('reviews.id');
    }
